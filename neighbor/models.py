@@ -19,6 +19,7 @@ class Neighborhood(models.Model):
     @classmethod
     def update_neighborhood(cls,id,name):
         return cls.objects.filter(id=id).update(name=name)
+        
 class User(models.Model):
     name = models.CharField(max_length=50)
     email=models.EmailField()
