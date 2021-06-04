@@ -13,10 +13,12 @@ class  NeighborhoodList(APIView):
             return Neighborhood.objects.get(pk=pk)
         except Neighborhood.DoesNotExist:
             return Http404 
-    def get(self,request,format=None):
-       neighborhood=Neighborhood.objects.all()
-       serializers=NeighborhoodSerializer(neighborhood,many=True)
-       return Response(serializers.data)
+   
+    def get(self,request,pk,format=None):
+        neighborhood=self.get_neighborhood(pk)
+        serializers=NeighborhoodSerializer(neighborhood)
+        return Response(serializers.data)
+
 
     def post(self,request,format=None):
         serializers=NeighborhoodSerializer(data=request.data)
@@ -54,6 +56,19 @@ class  NeighborhoodList(APIView):
         neighborhood.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+class NeighborhoodDetailList(APIView):
+   def get(self,request,format=None):
+       neighborhood=Neighborhood.objects.all()
+       serializers=NeighborhoodSerializer(neighborhood,many=True)
+       return Response(serializers.data)
+
+class NeighborhoodSearchList(APIView):
+    def get(self,request,name):
+        neighborhood=Neighborhood.find_neighborhood(name)
+        serializers=NeighborhoodSerializer(neighborhood, many=True)
+        return Response(serializers.data)
+ 
+
 class BusinessList(APIView):
         def get_business(self, pk):
             try:
@@ -61,10 +76,11 @@ class BusinessList(APIView):
             except Business.DoesNotExist:
                 return Http404()
 
-        def get(self, request,format=None):
-            business=Business.objects.all()
-            serializers=BusinessSerializer(business, many=True)
+        def get(self,request,pk,format=None):
+            business=self.get_business(pk)
+            serializers=BusinessSerializer(business)
             return Response(serializers.data)
+
 
         def post(self, request, format=None):
             serializers=BusinessSerializer(data=request.data)
@@ -103,6 +119,19 @@ class BusinessList(APIView):
             business.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
+class BusinessDetailList(APIView):
+       def get(self,request,format=None):
+        business=Business.objects.all()
+        serializers=BusinessSerializer(business,many=True)
+        return Response(serializers.data)
+
+class BusinessSearchList(APIView):
+    def get(self,request,name):
+        business=Business.find_business(name)
+        serializers=BusinessSerializer(business, many=True)
+        return Response(serializers.data)
+    
+
 
 
 class UserList(APIView):
@@ -111,11 +140,13 @@ class UserList(APIView):
             return User.objects.get(pk=pk)
         except User.DoesNotExist:
             raise Http404()
+    
+    
+    def get(self,request,pk,format=None):
+            business=self.get_users(pk)
+            serializers=UserSerializer(business)
+            return Response(serializers.data)
 
-    def get(self,request,format=None):
-        users=User.objects.all()
-        serializers=UserSerializer(users, many=True)
-        return Response(serializers.data)
 
     def post(self, request, format=None):
         serializers=UserSerializer(data=request.data)
@@ -153,3 +184,16 @@ class UserList(APIView):
         users=self.get_users(pk)
         users.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class UserDetailList(APIView):
+       def get(self,request,format=None):
+        users=User.objects.all()
+        serializers=UserSerializer(users,many=True)
+        return Response(serializers.data)
+
+class UserSearchList(APIView):
+    def get(self,request,name):
+        users=User.find_user(name)
+        serializers=UserSerializer(users, many=True)
+        return Response(serializers.data)
+    

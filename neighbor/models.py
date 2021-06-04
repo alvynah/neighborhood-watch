@@ -32,6 +32,10 @@ class User(models.Model):
         self.save()
     def delete_user(self):
         self.delete()
+    @classmethod
+    def find_user(cls,name):
+        return cls.objects.filter(name__icontains=name)
+
 
 class Business(models.Model):
     name=models.CharField(max_length=50)
