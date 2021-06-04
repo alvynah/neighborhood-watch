@@ -53,6 +53,7 @@ class  NeighborhoodList(APIView):
         neighborhood = self.get_neighborhood(pk)
         neighborhood.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
 class BusinessList(APIView):
         def get_business(self, pk):
             try:
@@ -102,97 +103,53 @@ class BusinessList(APIView):
             business.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
-# class UserList(APIView):
-#     rn Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
-#     def delete(self, request, pk, format=None):
-#         business = self.get_business(pk)
-#         business.delete()
-#         return Response(status=status.HTTP_204_NO_CONTENT)
 
-#     class UserList(APIView):
-#     def get_users(self,pk):
-#         try:
-#             return User.objects.get(pk=pk)
-#         except User.DoesNotExist:
-#             raise Http404()
+class UserList(APIView):
+    def get_users(self,pk):
+        try:
+            return User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            raise Http404()
 
-#     def get(self,request,format=None):
-#         users=User.objects.all()
-#         serializers=UserSerializer(users, many=True)
-#         return Response(serializers.data)
+    def get(self,request,format=None):
+        users=User.objects.all()
+        serializers=UserSerializer(users, many=True)
+        return Response(serializers.data)
 
-#     def post(self, request, format=None):
-#         serializers=UserSerializer(data=request.data)
-#         if serializers.is_valid():
-#         serializers.save()
+    def post(self, request, format=None):
+        serializers=UserSerializer(data=request.data)
+        if serializers.is_valid():
+            serializers.save()
 
-#         users=serializers.data
-#         response={
-#             'data':{
-#             'users':dict(users),
-#             'status':'success',
-#             'message':'user created successfully',
-#             }
-#         }
-#         return Response(response, status=status.HTTP_200_OK)
-#         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+            users=serializers.data
+            response={
+                        'data':{
+                        'users':dict(users),
+                        'status':'success',
+                        'message':'user created successfully',
+                     }
+                }
+            return Response(response, status=status.HTTP_200_OK)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
-#     def put(self,request,pk,format=None):
-#         users=self.get_users(pk)
-#         serializers=UserSerializer(users,request.data)
-#         if serializers.is_valid():
-#         serializers.save()
-#         users_list=serializers.data
-#         response = {
-#             'data': {
-#                 'users': dict(users_list),
-#                 'status': 'success',
-#              def get_users(self,pk):
-#         try:
-#             return User.objects.get(pk=pk)
-#         except User.DoesNotExist:
-#             raise Http404()
-
-#     def get(self,request,format=None):
-#         users=User.objects.all()
-#         serializers=UserSerializer(users, many=True)
-#         return Response(serializers.data)
-
-#     def post(self, request, format=None):
-#         serializers=UserSerializer(data=request.data)
-#         if serializers.is_valid():
-#         serializers.save()
-
-#         users=serializers.data
-#         response={
-#             'data':{
-#             'users':dict(users),
-#             'status':'success',
-#             'message':'user created successfully',
-#             }
-#         }
-#         return Response(response, status=status.HTTP_200_OK)
-#         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
-
-#     def put(self,request,pk,format=None):
-#         users=self.get_users(pk)
-#         serializers=UserSerializer(users,request.data)
-#         if serializers.is_valid():
-#         serializers.save()
-#         users_list=serializers.data
-#         response = {
-#             'data': {
-#                 'users': dict(users_list),
-#                 'status': 'success',
-#                 'message': 'user updated successfully',
-#             }
-#         }
-#         return Response(response, status=status.HTTP_200_OK)
-#         else:
-#         return Response(serializers.errors,status=status.HTTP_400_BAD_REQUEST)
+    def put(self,request,pk,format=None):
+        users=self.get_users(pk)
+        serializers=UserSerializer(users,request.data)
+        if serializers.is_valid():
+            serializers.save()
+            users_list=serializers.data
+            response = {
+                        'data': {
+                        'users': dict(users_list),
+                        'status': 'success',
+                        }
+                     }
+            return Response(response, status=status.HTTP_200_OK)
+        else:
+            return Response(serializers.errors,status=status.HTTP_400_BAD_REQUEST)
         
-#     def delete(self,request,pk,format=None):
-#         users=self.get_users(pk)
-#         users.delete()
-#         return Response(status=status.HTTP_204_NO_CONTENT)
+    def delete(self,request,pk,format=None):
+        users=self.get_users(pk)
+        users.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
