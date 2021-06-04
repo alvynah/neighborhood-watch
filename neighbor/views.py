@@ -11,4 +11,19 @@ class  NeighborhoodList(APIView):
     def get(self,request,format=None):
        neighborhood=Neighborhood.objects.all()
        serializers=NeighborhoodSerializer(neighborhood,many=True)
-       return Response(serializers.data) 
+       return Response(serializers.data)
+
+    def post(self,request,format=None):
+        serializers=NeighborhoodSerializer(data=request.data)
+        if serializers.is_valid():
+            serializers.save()
+            neighborhood=serializers.data
+            response={
+                'data':{
+                    'neighborhood':dict(neighborhood),
+                    'status':'success',
+                    'message':'neighborhood created successfully',
+                }
+            }
+            return Response(response,status=status.HTTP_200_OK)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
