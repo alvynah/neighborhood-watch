@@ -134,6 +134,49 @@ class BusinessSearchList(APIView):
 
 
 
+class ProfileList(APIView):
+    def get_profile(self,pk):
+        try:
+            return Profile.objects.get(pk=pk)
+        except Profile.DoesNotExist:
+            raise Http404()
+    
+    
+    def get(self,request,pk,format=None):
+        profiles=self.get_profile(pk)
+        serializers=ProfileSerializer(profiles)
+        return Response(serializers.data)
+
+    def put(self,request,pk,format=None):
+        profiles=self.get_profile(pk)
+        serializers=ProfileSerializer(profiles,request.data)
+        if serializers.is_valid():
+            serializers.save()
+            profiles_list=serializers.data
+            response = {
+                        'data': {
+                        'users': dict(profiles_list),
+                        'status': 'success',
+                        }
+                     }
+            return Response(response, status=status.HTTP_200_OK)
+        else:
+            return Response(serializers.errors,status=status.HTTP_400_BAD_REQUEST)
+
+class ProfileDetailsList(APIView):
+    def get(self,request,format=None):
+        profiles=Profile.objects.all()
+        serializers=ProfileSerializer(profiles,many=True)
+        return Response(serializers.data)
+
+class ProfileSearchList(APIView):
+    def get(self,request,search_term):
+        profiles=Profile.search_profile(search_term)
+        serializers=ProfileSerializer(profiles, many=True)
+        return Response(serializers.data)  
+
+
+
 class UserList(APIView):
     def get_users(self,pk):
         try:
@@ -146,7 +189,6 @@ class UserList(APIView):
             business=self.get_users(pk)
             serializers=UserSerializer(business)
             return Response(serializers.data)
-
 
     def post(self, request, format=None):
         serializers=UserSerializer(data=request.data)
@@ -164,21 +206,7 @@ class UserList(APIView):
             return Response(response, status=status.HTTP_200_OK)
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def put(self,request,pk,format=None):
-        users=self.get_users(pk)
-        serializers=UserSerializer(users,request.data)
-        if serializers.is_valid():
-            serializers.save()
-            users_list=serializers.data
-            response = {
-                        'data': {
-                        'users': dict(users_list),
-                        'status': 'success',
-                        }
-                     }
-            return Response(response, status=status.HTTP_200_OK)
-        else:
-            return Response(serializers.errors,status=status.HTTP_400_BAD_REQUEST)
+    
         
     def delete(self,request,pk,format=None):
         users=self.get_users(pk)
@@ -196,4 +224,69 @@ class UserSearchList(APIView):
         users=User.find_user(name)
         serializers=UserSerializer(users, many=True)
         return Response(serializers.data)
+
+
+class  PostList(APIView):
+    def get_post(self, pk):
+        try:
+            return Post.objects.get(pk=pk)
+        except Post.DoesNotExist:
+            return Http404 
+   
+    def get(self,request,pk,format=None):
+        posts=self.get_post(pk)
+        serializers=PostSerializer(posts)
+        return Response(serializers.data)
+
+
+    def post(self,request,format=None):
+        serializers=PostSerializer(data=request.data)
+        if serializers.is_valid():
+            serializers.save()
+            posts=serializers.data
+            response={
+                'data':{
+                    'neighborhood':dict(posts),
+                    'status':'success',
+                    'message':'neighborhood created successfully',
+                }
+            }
+            return Response(response,status=status.HTTP_200_OK)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def put(self, request, pk, format=None):
+        posts = self.get_post(pk)
+        serializers = PostSerializer(posts, request.data)
+        if serializers.is_valid():
+            serializers.save()
+            posts=serializers.data
+            response = {
+                     'data': {
+                     'neighborhood': dict(posts),
+                     'status': 'success',
+                    'message': 'neighborhood updated successfully',
+                 }
+             }
+            return Response(response)
+        else:
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        posts = self.get_post(pk)
+        posts.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+class PostDetailList(APIView):
+   def get(self,request,format=None):
+       posts=Post.objects.all()
+       serializers=PostSerializer(posts,many=True)
+       return Response(serializers.data)
+
+class PostSearchList(APIView):
+    def get(self,request,name):
+        posts=Post.search_post(name)
+        serializers=PostSerializer(posts, many=True)
+        return Response(serializers.data)
+ 
+
     

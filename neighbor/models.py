@@ -59,7 +59,7 @@ class Profile(models.Model):
         return f'{self.user.username} Profile'
 
 class Business(models.Model):
-    business_name=models.CharField(max_length=50)
+    name=models.CharField(max_length=50)
     description = models.TextField(blank=True)
     email =models.EmailField()
     user=models.ForeignKey(Profile,on_delete=models.CASCADE) 
@@ -79,7 +79,8 @@ class Business(models.Model):
     @classmethod
     def update_business(cls,id,name):
         update = cls.objects.filter(id=id).update(name=name)
-        return update 
+        return update
+
 class Post(models.Model):
     title = models.CharField(max_length=120, null=True)
     post = models.TextField()
@@ -89,3 +90,7 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+    @classmethod
+    def search_post(cls, search_term):
+        return cls.objects.filter(title__icontains=search_term).all()
