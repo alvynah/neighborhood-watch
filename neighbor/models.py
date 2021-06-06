@@ -32,7 +32,7 @@ class Profile(models.Model):
     name = models.CharField(max_length=50)
     bio=models.TextField()
     profile_picture = models.ImageField(upload_to='images/', default='default.png')
-    neighborhood=models.ForeignKey(Neighborhood,on_delete=models.CASCADE)
+    neighborhood=models.ForeignKey(Neighborhood,on_delete=models.SET_NULL,null=True,related_name='neighbors',blank=True)
 
     def __str__(self):
         return f'{self.user.username} Profile'
