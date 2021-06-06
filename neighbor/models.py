@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.db.models.deletion import CASCADE
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from cloudinary.models import CloudinaryField
+
 
 # Create your models here.
 
@@ -31,7 +33,7 @@ class Profile(models.Model):
     user=models.OneToOneField(User,on_delete=models.CASCADE,related_name='profile') 
     name = models.CharField(max_length=50)
     bio=models.TextField()
-    profile_picture = models.ImageField(upload_to='images/', default='default.png')
+    profile_picture = CloudinaryField('image')
     neighborhood=models.ForeignKey(Neighborhood,on_delete=models.SET_NULL,null=True,related_name='neighbors',blank=True)
 
     def __str__(self):
