@@ -6,6 +6,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import *
 from .serializers import *
+from .permissions import IsAdminOrReadOnly
+
 # Create your views here.
 
 class  NeighborhoodList(generics.ListCreateAPIView):
@@ -43,6 +45,8 @@ class  NeighborhoodList(generics.ListCreateAPIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class NeighborhoodPostList(generics.ListCreateAPIView):
+    permission_classes = (IsAdminOrReadOnly,)
+
     def post(self,request,format=None):
         serializers=NeighborhoodSerializer(data=request.data)
         if serializers.is_valid():
