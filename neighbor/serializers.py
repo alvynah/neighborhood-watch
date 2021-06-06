@@ -15,8 +15,9 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username','email', 'password1','password2')
+        fields = ('username','email', 'password')
 class PostSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = Post
         fields = "__all__"
@@ -24,7 +25,7 @@ class PostSerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     business=BusinessSerializer(many=True,read_only=True)
     class Meta:
-        model = User
+        model = Profile
         fields = "__all__"
         
 class NeighborhoodSerializer(serializers.ModelSerializer):
