@@ -6,6 +6,8 @@ from django.conf.urls.static import static
 import neighbor
 
 urlpatterns = [
+    path('',views.index,name='welcome'),
+
     # neighbor
     path('api/neighbors/', views.NeighborhoodDetailList.as_view(), name='neighbor'),
     path('api/neighbors/post/',views.NeighborhoodPostList.as_view(), name ='neighbor_post'),

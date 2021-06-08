@@ -45,7 +45,6 @@ class  NeighborhoodList(generics.ListCreateAPIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class NeighborhoodPostList(generics.ListCreateAPIView):
-    permission_classes = (IsAdminOrReadOnly,)
 
     def post(self,request,format=None):
         serializers=NeighborhoodSerializer(data=request.data)
@@ -301,6 +300,12 @@ class PostSearchList(APIView):
         posts=Post.search_post(name)
         serializers=PostSerializer(posts, many=True)
         return Response(serializers.data)
+
  
+def index(request):
+    """
+    The home page. This renders the container for the single-page app.
+    """
+    return render(request, 'base.html') 
 
     
