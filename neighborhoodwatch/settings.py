@@ -35,9 +35,7 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = 'neighborhoodapi.herokuapp.com'
 
 CORS_ORIGIN_ALLOW_ALL = True
-CORS_ORIGIN_WHITELIST = (
-    'http://localhost:8081',
-)
+
 # Application definition
 
 INSTALLED_APPS = [
